@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -20,8 +21,8 @@ public class MainActivity extends AppCompatActivity {
     static final int bb = 3;
 
     Spinner spinnerLeft, spinnerRight;
-    ImageView ivLeft,ivRight;
-    Button button_battle;
+    ImageView ivPeepLeft,ivPeepRight,ivMachine;
+    TextView tv_scoreLeft , tv_scoreRight;
 
     ArrayList<String> teamNameList= new ArrayList<>();
     ArrayList<Team> teamList = new ArrayList<>();
@@ -33,16 +34,19 @@ public class MainActivity extends AppCompatActivity {
         init();
 
 
-        makeTeam("Random","Peace"); // 팀 명 추가할 것
+        makeTeam("Random","Peace","TitForTat"); // 팀 명 추가할 것
+
 
         //Adapter 선언
-       ArrayAdapter adapter = new ArrayAdapter<String>(this,R.layout.support_simple_spinner_dropdown_item,teamNamelist);
-        ivRight.setScaleX((float)-1);
-        ivRight.setScaleY((float)1);
+       ArrayAdapter adapter = new ArrayAdapter<String>(this,R.layout.support_simple_spinner_dropdown_item,teamNameList);
+
+        //UI
+        ivPeepRight.setScaleX((float)-1);
+        ivPeepRight.setScaleY((float)1);
         spinnerRight.setAdapter(adapter);
         spinnerLeft.setAdapter(adapter);
-
     }
+
     int getResult(Team thisTeam, Team otherTeam, int term){ //0 은 협력, 1은 배반
         if( thisTeam.arr.get(term) == 0 && otherTeam.arr.get(term) == 0){ // 상호협력
             thisTeam.result += 2;
@@ -75,14 +79,14 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     void onClick(View v){
-        int left = spinnerLeft.getId();
-        int right = spinnerRight.getId();
+        int left = spinnerLeft.getSelectedItemPosition();
+        int right = spinnerRight.getSelectedItemPosition();
         Team A = teamList.get(left);
         Team B = teamList.get(right);
 
         for(int i = 0 ; i < maxTerm ; i++){
-            A.resulting(B,i);
-            B.resulting(A,i);
+            A.addToResultInArr(B,i);
+            B.addToResultInArr(A,i);
             int result = getResult(A,B,i);
             switch (result){ // Animation Play, 비프 음 mp3 play 구현할 것
                 case cc:
@@ -94,15 +98,25 @@ public class MainActivity extends AppCompatActivity {
                 case bb:
                     break;
             }
+            tv_scoreLeft.setText(""+A.result);
+            tv_scoreRight.setText(""+B.result);
+
         }
+        //게임이 끝나면 초기화
+        A.arr = new ArrayList<>();
+        B.arr = new ArrayList<>();
+        A.result = 10;
+        B.result = 10;
 
 
     }
     void init(){
-        button_battle = (Button)findViewById(R.id.button_battle);
         spinnerLeft = (Spinner)findViewById(R.id.spinner_left);
         spinnerRight = (Spinner)findViewById(R.id.spinner_right);
-        ivLeft = (ImageView)findViewById(R.id.imageView);
-        ivRight = (ImageView)findViewById(R.id.imageView2);
+        ivPeepLeft = (ImageView)findViewById(R.id.imageView_leftPeep);
+        ivPeepRight = (ImageView)findViewById(R.id.imageView_rightPeep);
+        ivMachine = (ImageView)findViewById(R.id.imageView_machine);
+        tv_scoreLeft = (TextView)findViewById(R.id.tv_scoreLeft);
+        tv_scoreRight =(TextView)findViewById(R.id.tv_scoreRight);
     }
 }

@@ -25,8 +25,10 @@ public class Team { // Team 별로 관리
         switch (this.teamName){
             case "Random":
                 Random random = new Random();
-                return random.nextInt(2);
+                int rand = random.nextInt(2);
+                return rand;
             case "Peace":
+                this.arr.add(0);
                 return 1;
             case "TitForTat" :
                 if(term==0) return 0;
@@ -34,6 +36,11 @@ public class Team { // Team 별로 관리
                 else return other.arr.get(term-1);
         }
         return 0;
+    }
+    public int addToResultInArr(Team other,int term){
+        int res = resulting(other,term);
+        this.arr.add(res);
+        return res;
     }
 
 }
