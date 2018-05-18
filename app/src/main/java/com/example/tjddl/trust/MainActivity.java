@@ -1,5 +1,6 @@
 package com.example.tjddl.trust;
 
+import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -98,8 +99,9 @@ public class MainActivity extends AppCompatActivity {
                 case bb:
                     break;
             }
-            tv_scoreLeft.setText(""+A.result);
-            tv_scoreRight.setText(""+B.result);
+            SystemClock.sleep(100);
+            tv_scoreLeft.setText(""+A.result + i);
+            tv_scoreRight.setText(""+B.result + i);
 
         }
         //게임이 끝나면 초기화
