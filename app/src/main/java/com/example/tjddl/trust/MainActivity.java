@@ -4,12 +4,11 @@ import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Adapter;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -34,12 +33,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         init();
 
-
         makeTeam("Random","Peace","TitForTat"); // 팀 명 추가할 것
 
+        Animation left_translate = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.translate_left_to_right);
+        Animation right_translate = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.translate_right_to_left);
+
+        ivPeepLeft.startAnimation(left_translate);
+        ivPeepRight.startAnimation(right_translate);
 
         //Adapter 선언
-       ArrayAdapter adapter = new ArrayAdapter<String>(this,R.layout.support_simple_spinner_dropdown_item,teamNameList);
+        ArrayAdapter adapter = new ArrayAdapter<String>(this,R.layout.support_simple_spinner_dropdown_item,teamNameList);
 
         //UI
         ivPeepRight.setScaleX((float)-1);
@@ -84,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
         int right = spinnerRight.getSelectedItemPosition();
         Team A = teamList.get(left);
         Team B = teamList.get(right);
+
 
         for(int i = 0 ; i < maxTerm ; i++){
             A.addToResultInArr(B,i);
