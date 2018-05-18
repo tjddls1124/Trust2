@@ -102,6 +102,7 @@ public class MainActivity extends AppCompatActivity {
             SystemClock.sleep(100);
             tv_scoreLeft.setText(""+A.result + i);
             tv_scoreRight.setText(""+B.result + i);
+            SystemClock.sleep(100);
 
         }
         //게임이 끝나면 초기화
