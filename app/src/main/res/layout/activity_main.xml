@@ -52,6 +52,15 @@
                 android:layout_marginTop="30dp"
                 android:text="0"
                 android:textSize="50sp" />
+
+            <Button
+                android:id="@+id/btn_totalScore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:onClick="onClick_btn_totalScore"
+                android:text="결과" />
+
         </FrameLayout>
 
         <LinearLayout

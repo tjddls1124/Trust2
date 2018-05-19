@@ -1,5 +1,6 @@
 package com.example.tjddl.trust;
 
+import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -7,6 +8,7 @@ import android.media.SoundPool;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -14,6 +16,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -43,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     Animation left_translate,right_translate,insertCoinLeft,insertCoinRight,goBackLeft,goBackRight,trans_coin_left,trans_coin_right,init_LeftCoin,init_rightCoin;
     SoundPool sound = new SoundPool(1, AudioManager.STREAM_ALARM, 0);
     int soundId;
+    Button btn_totalScore;
 
 
     ArrayList<String> teamNameList= new ArrayList<>();
@@ -55,11 +59,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         init();
+        //BGM 추가.
         mp = MediaPlayer.create(this, R.raw.bg_music);
-        mp.setLooping(true);
-        mp.start();
-        tv_round.setVisibility(View.GONE);
+        mp.setLooping(true); // 무한루프
+        mp.start(); // 음악시작
+        tv_round.setVisibility(View.GONE); // 라운드 시작시 보이지 않게 설정
 
+        //코인 비프음 미리 로드시켜둠
         soundId = sound.load(this, R.raw.coin_get, 1);
 
         makeTeam("Random","Peace","TitForTat"); // 팀 명 추가
@@ -105,10 +111,6 @@ public class MainActivity extends AppCompatActivity {
         return 0;
     }
 
-
-
-
-
     void makeTeam(String... team){
         for(String name : team){
             ArrayList<Integer> arr = new ArrayList<>();
@@ -116,6 +118,23 @@ public class MainActivity extends AppCompatActivity {
             teamList.add(t);
             teamNameList.add(name);
         }
+    }
+
+    void onClick_btn_totalScore (View v) {
+        AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
+        alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        String totalScore = "";
+        totalScore = totalScore + teamNameList.get(0) + " : " + score_teamA + "\n" +
+                                  teamNameList.get(1) + " : " + score_teamB + "\n" +
+                                  teamNameList.get(2) + " : " + score_teamC + "\n";
+                                  //teamNameList.get(3) + " : " + score_teamD + "\n";
+                alert.setMessage(totalScore);
+        alert.show();
     }
     void onClick(View v){
         if(isPlaying) return; // until end
@@ -166,6 +185,7 @@ public class MainActivity extends AppCompatActivity {
         ivCoinLeft = (ImageView)findViewById(R.id.imageView_coinLeft);
         ivCoinRight = (ImageView)findViewById(R.id.imageView_coinRight);
         tv_round = (TextView)findViewById(R.id.tv_round);
+        btn_totalScore = (Button)findViewById(R.id.btn_totalScore);
     }
 
 
@@ -278,8 +298,6 @@ public class MainActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
-            round = 1;
-
             return null;
         }
 
@@ -335,6 +353,36 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+
+            switch (A.teamName) {
+                case "Random" :
+                    score_teamA += A.result;
+                    break;
+                case "Peace" :
+                    score_teamB += A.result;
+                    break;
+                case "TitForTat" :
+                    score_teamC += A.result;
+                    break;
+                default :
+                    score_teamD += A.result;
+                    break;
+
+            }
+            switch (B.teamName) {
+                case "Random" :
+                    score_teamA += B.result;
+                    break;
+                case "Peace" :
+                    score_teamB += B.result;
+                    break;
+                case "TitForTat" :
+                    score_teamC += B.result;
+                    break;
+                default :
+                    score_teamD += B.result;
+                    break;
+            }
             //게임이 끝나면 초기화
             A.arr = new ArrayList<>();
             B.arr = new ArrayList<>();
@@ -342,6 +390,7 @@ public class MainActivity extends AppCompatActivity {
             B.result = 10;
             ivPayoff.setImageResource(R.drawable.iterated_payoffs);
             isPlaying = false; // make Playing non-simulating
+            round = 1;
         }
     }
 }
