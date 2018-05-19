@@ -30,13 +30,20 @@ public class MainActivity extends AppCompatActivity {
     static final int bb = 3;
 
     private static MediaPlayer mp;
+    private static int round = 1;
+
+    public static int score_teamA = 0;
+    public static int score_teamB = 0;
+    public static int score_teamC = 0;
+    public static int score_teamD = 0;
 
     Spinner spinnerLeft, spinnerRight;
     ImageView ivPeepLeft,ivPeepRight,ivMachine,ivPayoff,ivCoinLeft,ivCoinRight;
-    TextView tv_scoreLeft , tv_scoreRight;
+    TextView tv_scoreLeft , tv_scoreRight, tv_round;
     Animation left_translate,right_translate,insertCoinLeft,insertCoinRight,goBackLeft,goBackRight,trans_coin_left,trans_coin_right,init_LeftCoin,init_rightCoin;
     SoundPool sound = new SoundPool(1, AudioManager.STREAM_ALARM, 0);
     int soundId;
+
 
     ArrayList<String> teamNameList= new ArrayList<>();
     ArrayList<Team> teamList = new ArrayList<>();
@@ -51,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
         mp = MediaPlayer.create(this, R.raw.bg_music);
         mp.setLooping(true);
         mp.start();
+        tv_round.setVisibility(View.GONE);
 
         soundId = sound.load(this, R.raw.coin_get, 1);
 
@@ -122,6 +130,8 @@ public class MainActivity extends AppCompatActivity {
         tv_scoreLeft.setText("10");
         tv_scoreRight.setText("10");
 
+        tv_round.setVisibility(View.VISIBLE);
+
     }
 
     /**
@@ -155,6 +165,7 @@ public class MainActivity extends AppCompatActivity {
         ivPayoff = (ImageView)findViewById(R.id.imageView_payoff);
         ivCoinLeft = (ImageView)findViewById(R.id.imageView_coinLeft);
         ivCoinRight = (ImageView)findViewById(R.id.imageView_coinRight);
+        tv_round = (TextView)findViewById(R.id.tv_round);
     }
 
 
@@ -168,6 +179,7 @@ public class MainActivity extends AppCompatActivity {
                 ivPayoff.setImageResource(payoff);
                 tv_scoreLeft.setText(""+A.result);
                 tv_scoreRight.setText(""+B.result);
+                round++;
                 int streamId = sound.play(soundId, 1.0F, 1.0F,  1,  0,  1.0F);
 
                 switch (res){
@@ -266,6 +278,8 @@ public class MainActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
+            round = 1;
+
             return null;
         }
 
@@ -275,6 +289,8 @@ public class MainActivity extends AppCompatActivity {
             A.addToResultInArr(B,values[0]);
             B.addToResultInArr(A,values[0]);
             int result = getResult(A,B,values[0]);
+
+            tv_round.setText("Round : "+round);
 
             //init Coin
             ivCoinRight.setVisibility(View.VISIBLE);
