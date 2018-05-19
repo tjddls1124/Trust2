@@ -1,6 +1,9 @@
 package com.example.tjddl.trust;
 
 import android.graphics.drawable.Drawable;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.media.SoundPool;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -26,93 +29,32 @@ public class MainActivity extends AppCompatActivity {
     static final int bc = 2;
     static final int bb = 3;
 
+    private static MediaPlayer mp;
+
     Spinner spinnerLeft, spinnerRight;
     ImageView ivPeepLeft,ivPeepRight,ivMachine,ivPayoff,ivCoinLeft,ivCoinRight;
     TextView tv_scoreLeft , tv_scoreRight;
     Animation left_translate,right_translate,insertCoinLeft,insertCoinRight,goBackLeft,goBackRight,trans_coin_left,trans_coin_right,init_LeftCoin,init_rightCoin;
-
+    SoundPool sound = new SoundPool(1, AudioManager.STREAM_ALARM, 0);
+    int soundId;
 
     ArrayList<String> teamNameList= new ArrayList<>();
     ArrayList<Team> teamList = new ArrayList<>();
 
     Handler handler = new Handler();
 
-
-
-    //resulting Animation
-    //결과 보여주기
-    public void playResultAnimation(final int payoff,final int res){
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                //Change & Announcing Score
-                ivPayoff.setImageResource(payoff);
-                tv_scoreLeft.setText(""+A.result);
-                tv_scoreRight.setText(""+B.result);
-
-                switch (res){
-                    case cc :
-                        ivCoinLeft.setVisibility(View.INVISIBLE);
-                        ivCoinRight.setVisibility(View.INVISIBLE);
-                        ivPeepLeft.setImageResource(R.drawable.cc_peep);
-                        ivPeepRight.setImageResource(R.drawable.cc_peep);
-                        break;
-                    case cb :
-                        ivCoinLeft.setVisibility(View.INVISIBLE);
-                        ivCoinRight.setVisibility(View.VISIBLE);
-                        ivPeepLeft.setImageResource(R.drawable.c_peep);
-                        ivPeepRight.setImageResource(R.drawable.b_peep);
-                        break;
-                    case bc:
-                        ivCoinLeft.setVisibility(View.VISIBLE);
-                        ivCoinRight.setVisibility(View.INVISIBLE);
-                        ivPeepLeft.setImageResource(R.drawable.b_peep);
-                        ivPeepRight.setImageResource(R.drawable.c_peep);
-                        break;
-                    case bb:
-                        ivCoinLeft.setVisibility(View.INVISIBLE);
-                        ivCoinRight.setVisibility(View.INVISIBLE);
-                        ivPeepLeft.setImageResource(R.drawable.bb_peep);
-                        ivPeepRight.setImageResource(R.drawable.bb_peep);
-                        break;
-                }
-            }
-        },3000);
-    }
-
-    /**
-    Animation after Inserting
-     */
-    public void afterInsertAnimation(){
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-
-                //Peep return
-                ivPeepLeft.setImageResource(R.drawable.splash_peep);
-                ivPeepRight.setImageResource(R.drawable.splash_peep);
-
-                //go back
-                ivPeepLeft.startAnimation(goBackLeft);
-                ivPeepRight.startAnimation(goBackRight);
-
-                ivCoinRight.setVisibility(View.INVISIBLE);
-                ivCoinLeft.setVisibility(View.INVISIBLE);
-
-
-
-            }
-        }, 4500);
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         init();
+        mp = MediaPlayer.create(this, R.raw.bg_music);
+        mp.setLooping(true);
+        mp.start();
+
+        soundId = sound.load(this, R.raw.coin_get, 1);
 
         makeTeam("Random","Peace","TitForTat"); // 팀 명 추가
-
 
         setAnimation();
 
@@ -216,6 +158,91 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    //resulting Animation
+    //결과 보여주기
+    public void playResultAnimation(final int payoff,final int res){
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                //Change & Announcing Score
+                ivPayoff.setImageResource(payoff);
+                tv_scoreLeft.setText(""+A.result);
+                tv_scoreRight.setText(""+B.result);
+                int streamId = sound.play(soundId, 1.0F, 1.0F,  1,  0,  1.0F);
+
+                switch (res){
+                    case cc :
+                        ivCoinLeft.setVisibility(View.INVISIBLE);
+                        ivCoinRight.setVisibility(View.INVISIBLE);
+                        ivPeepLeft.setImageResource(R.drawable.cc_peep);
+                        ivPeepRight.setImageResource(R.drawable.cc_peep);
+                        break;
+                    case cb :
+                        ivCoinLeft.setVisibility(View.INVISIBLE);
+                        ivCoinRight.setVisibility(View.VISIBLE);
+                        ivPeepLeft.setImageResource(R.drawable.c_peep);
+                        ivPeepRight.setImageResource(R.drawable.b_peep);
+                        break;
+                    case bc:
+                        ivCoinLeft.setVisibility(View.VISIBLE);
+                        ivCoinRight.setVisibility(View.INVISIBLE);
+                        ivPeepLeft.setImageResource(R.drawable.b_peep);
+                        ivPeepRight.setImageResource(R.drawable.c_peep);
+                        break;
+                    case bb:
+                        ivCoinLeft.setVisibility(View.INVISIBLE);
+                        ivCoinRight.setVisibility(View.INVISIBLE);
+                        ivPeepLeft.setImageResource(R.drawable.bb_peep);
+                        ivPeepRight.setImageResource(R.drawable.bb_peep);
+                        break;
+                }
+            }
+        },3000);
+    }
+
+    @Override
+    public void onDestroy() {
+        mp.stop();
+        super.onDestroy();
+    }
+
+    @Override
+    public void onResume() {
+        mp.start();
+        super.onResume();
+    }
+
+    @Override
+    public void onBackPressed() {
+        mp.stop();
+        super.onBackPressed();
+    }
+
+    /**
+     Animation after Inserting
+     */
+    public void afterInsertAnimation(){
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                //Peep return
+                ivPeepLeft.setImageResource(R.drawable.splash_peep);
+                ivPeepRight.setImageResource(R.drawable.splash_peep);
+
+                //go back
+                ivPeepLeft.startAnimation(goBackLeft);
+                ivPeepRight.startAnimation(goBackRight);
+
+                ivCoinRight.setVisibility(View.INVISIBLE);
+                ivCoinLeft.setVisibility(View.INVISIBLE);
+
+
+
+            }
+        }, 4500);
+    }
+
     /**
      * UI Thread _ AsyncTask
      * Animation working
@@ -302,3 +329,4 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 }
+
