@@ -22,9 +22,8 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_gravity="center"
-                android:layout_marginRight="40dp"
+                android:layout_marginRight="45dp"
                 android:ems="10"
-                android:inputType="textPersonName"
                 android:text="10"
                 android:textSize="40dp" />
 
@@ -33,9 +32,8 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_gravity="center"
-                android:layout_marginLeft="45dp"
+                android:layout_marginLeft="55dp"
                 android:ems="10"
-                android:inputType="textPersonName"
                 android:text="10"
                 android:textSize="40dp" />
 
@@ -77,14 +75,6 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/imageView_rightPeep"
-                android:layout_width="164dp"
-                android:layout_height="182dp"
-                android:layout_gravity="right|center"
-                android:layout_weight="1"
-                app:srcCompat="@drawable/splash_peep" />
-
-            <ImageView
                 android:id="@+id/imageView_machine"
                 android:layout_width="wrap_content"
                 android:layout_height="281dp"
@@ -93,10 +83,38 @@
                 app:srcCompat="@drawable/iterated_machine" />
 
             <ImageView
+                android:id="@+id/imageView_coinLeft"
+                android:visibility="invisible"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_gravity="center|left"
+                android:layout_marginBottom="50dp"
+                android:layout_marginLeft="100dp"
+                app:srcCompat="@drawable/iterated_coin" />
+
+            <ImageView
+                android:id="@+id/imageView_coinRight"
+                android:visibility="invisible"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_gravity="center|right"
+                android:layout_marginBottom="50dp"
+                android:layout_marginRight="100dp"
+                app:srcCompat="@drawable/iterated_coin" />
+
+            <ImageView
                 android:id="@+id/imageView_leftPeep"
                 android:layout_width="164dp"
                 android:layout_height="182dp"
                 android:layout_gravity="left|center"
+                app:srcCompat="@drawable/splash_peep" />
+
+            <ImageView
+                android:id="@+id/imageView_rightPeep"
+                android:layout_width="164dp"
+                android:layout_height="182dp"
+                android:layout_gravity="right|center"
+                android:layout_weight="1"
                 app:srcCompat="@drawable/splash_peep" />
 
             <ImageView
