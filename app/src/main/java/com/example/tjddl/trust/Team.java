@@ -28,8 +28,7 @@ public class Team { // Team 별로 관리
                 int rand = random.nextInt(2);
                 return rand;
             case "Peace":
-                this.arr.add(0);
-                return 1;
+                return 0;
             case "TitForTat" :
                 if(term==0) return 0;
                 else if(term == 10) return 1;
