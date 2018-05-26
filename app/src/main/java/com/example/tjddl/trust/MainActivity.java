@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
         //코인 비프음 미리 로드시켜둠
         soundId = sound.load(this, R.raw.coin_get, 1);
 
-        makeTeam("Random","Peace","TitForTat"); // 팀 명 추가
+        makeTeam("Random","Peace","TitForTat", "전설의 타이거", "크로스팀", "Wind"); // 팀 명 추가
 
         setAnimation();
 

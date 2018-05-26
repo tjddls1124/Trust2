@@ -34,15 +34,18 @@ public class Team { // Team 별로 관리
                 else if(term == 10) return 1;
                 else return other.arr.get(term-1);
 
-            case "Coding" :
-                Random rand1 = new Random();
-                int choise1  = rand1.nextInt(10);
-                if (choise1 == 5)
-                    return 0;
+            case "전설의 타이거" :
+                Random rand3 = new Random();
+                int num = rand3.nextInt(2);
+                if (term == 0)
+                    return 1;
+                if (other.arr.get(term-1) == 1 )
+                    return num;
                 else
                     return 1;
 
-            case "진격의 스틱맨" :
+
+            case "크로스팀" :
                 if (term == 0 )
                     return 1;
                 int zero = 0;
@@ -55,22 +58,16 @@ public class Team { // Team 별로 관리
                         one++;
                     cnt++;
                 }
-                if (one < zero)
-                    return 0;
-                else if (one == zero) {
-                    Random rand2 = new Random();
-                    int choise2  = rand2.nextInt(10);
-                    if (choise2 < 5)
-                        return 1;
-                    else
-                        return 0;
-                }
-                else
+                if (one > zero)
                     return 1;
+                else
+                    return 0;
 
             case "Wind" :
-                switch (term) {
+                Random rand5 = new Random();
+                int choise4  = rand5.nextInt(2);
 
+                  switch (term) {
                     case 0:
                         return 0;
                     case 1:
@@ -82,8 +79,6 @@ public class Team { // Team 별로 관리
                     case 4:
                         return 1;
                     case 5:
-                        Random rand4 = new Random();
-                        int choise4  = rand4.nextInt(2);
                         return choise4;
                     case 6:
                         return 1;
@@ -97,9 +92,7 @@ public class Team { // Team 별로 관리
                             return 0;
                         }
                     case 9:
-                        Random rand3 = new Random();
-                        int choise3  = rand3.nextInt(2);
-                        return choise3;
+                        return choise4;
 
                 }
         }
